@@ -11,12 +11,13 @@ export HISTSIZE=10000
 # number of lines saved in the history after logout
 export SAVEHIST=10000 
 
-#Colored ls
+#ls aliases and color config
 export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
 alias ls="ls -G"
-
-#la shortcut
+alias ll="ls -l"
 alias la="ls -a"
+alias lla="ls -la"
+
 
 #Maven heap augmentation
 export MAVEN_OPTS="-Xmx1024M"
