@@ -1,5 +1,6 @@
 export PS1="%/: "
-autoload -U compinit promptinit
+autoload -U compinit promptinit colors
+colors
 compinit
 promptinit
 zstyle ':completion:*' menu select
@@ -18,60 +19,48 @@ alias ll="ls -l"
 alias la="ls -a"
 alias lla="ls -la"
 
+export PATH="${PATH}:/gitwork/nexus"
+export EC2_HOME="/usr/local/Cellar/ec2-api-tools/1.6.13.0/libexec"
 
 #Maven heap augmentation
 export MAVEN_OPTS="-Xmx1024M"
 
 #Java Home
-export JAVA_HOME=`/usr/libexec/java_home -v 1.6`
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.7.0_60.jdk/Contents/Home"
 
-#virtualenv stuff
-source /usr/local/bin/virtualenvwrapper.sh
-export PIP_VIRTUALENV_BASE=$WORKON_HOME
-export PIP_RESPECT_VIRTUALENV=true
-
-#node stuff
-export NODE_PATH=/usr/local/lib/node_modules
-
-#hadoop and hbase stuff
-export HADOOP_HOME="/Users/ben.norton/hadoop/hadoop-0.20.2-cdh3u3"
-export PATH="${PATH}:${HADOOP_HOME}/bin"
-export HBASE_HOME="/Users/ben.norton/hbase/hbase-0.90.4-cdh3u3"
-
-#shortcut functions
-env () {
-	source ~/virtualenvs/$1/bin/activate
-}
+#RVM
+export PATH=$PATH:"$HOME/.rvm/scripts/rvm"
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
 gw () {
 	cd /gitwork/$1
 }
 
-gwma () {
-	cd /gitwork/magpie-apps/dropwizard-container;
-	clear;
+#set last project
+mlp () {
+	echo $(pwd) > ~/last.project.directory
+	echo $fg[red]"[shell] =====> saved $(pwd) as last project directory."
+}
+#change directory last project
+cdlp () {
+	cd $(cat ~/last.project.directory)
 }
 
-restart () {
-	clear;
-	mvn clean install -DskipTests;
-	java -jar -Xmx512M target/dropwizard-container-0.1-SNAPSHOT.jar server deployment/local-config.json;
-}
-re () {
-	clear;
-	mvn clean install;
-	mvn exec:exec -Dconfig="deployment/config.local.yml";
+rs () {
+	echo $(pwd) > ~/zshell.previous.directory;
+	source ~/.zshrc;
+	cd $(cat zshell.previous.directory);
 }
 
+alias erc="vim ~/.zshrc"
 
-#This sets up and down to search history for lines beginning with current line
+# Super fun keybindy stuff!
 bindkey "^[[A" history-search-backward
 bindkey "^[[B" history-search-forward
 
-export VIRTUALENV_DISTRIBUTE=true
-
 #Aesthetic launch stuff
-cd /gitwork/brotip
 clear
-./brotip random | cowsay -f eyes
+fortune | cowsay -f eyes
 cd ~
+
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
